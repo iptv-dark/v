@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="settings-title-tag">الإعدادات - IPTV</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <script>
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        
+        // تطبيق اللغة الافتراضية عند التحميل
+        const currentLang = localStorage.getItem('language') || 'ar';
+        document.documentElement.setAttribute('lang', currentLang);
+        document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+    </script>
+    
+    <style>
+        /* إضافة أنماط الثيم الفاتح (Light Theme) */
+        :root {
+            --dashboard-bg: #0d1117;
+            --grid-item-bg: #1e2a38;
+            --text-color: white;
+            --header-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --dashboard-bg: #f4f7f6;
+            --grid-item-bg: #ffffff;
+            --text-color: #333;
+            --header-border: rgba(0, 0, 0, 0.1);
+        }
+        
+        .dashboard-body {
+            background: var(--dashboard-bg);
+            color: var(--text-color);
+        }
+        .dashboard-header, .dashboard-footer {
+            border-color: var(--header-border);
+        }
+        .dashboard-header a, .dashboard-footer {
+            color: var(--text-color);
+        }
+        .dashboard-header a.goback-link, .dashboard-header a.about-link {
+            border-color: rgba(var(--text-color-rgb), 0.3);
+            color: var(--text-color);
+        }
+        
+        /* أنماط الإعدادات */
+        .settings-container {
+            padding: 50px 40px;
+            text-align: center;
+        }
+        .settings-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            text-align: right;
+        }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .setting-item {
+            background: var(--grid-item-bg);
+            border-radius: 10px;
+            padding: 25px 15px;
+            text-align: center;
+            color: var(--text-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .setting-item:hover {
+            background: #2b394d;
+            transform: translateY(-5px);
+        }
+        .setting-icon {
+            fill: #4CAF50;
+        }
+
+        /* أنماط الخيارات الديناميكية (Theme/Lang) */
+        .option-setting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--grid-item-bg);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+        }
+        .option-setting span {
+            font-weight: bold;
+        }
+        .option-setting select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid var(--header-border);
+            background: var(--dashboard-bg);
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <div class="logo-text-pro">
+            <span class="iptv">IPTV</span>
+            <span class="smarters" id="header-settings-text">SETTINGS</span>
+        </div>
+        <div class="header-info">
+            <span id="current-time"></span>
+            <span id="current-date"></span>
+            <div class="user-icons">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="7" r="3"/><path d="M12 10c-3.87 0-7 3.13-7 7v2h14v-2c0-3.87-3.13-7-7-7z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="15" cy="12" r="3"/><path d="M15 15c-3.87 0-7 3.13-7 7v2h14v-2c0-3.87-3.13-7-7-7z"/></svg>
+            </div>
+            <a href="dashboard.html" class="goback-link" id="goback-text">Go back</a>
+        </div>
+    </header>
+
+    <div class="settings-container">
+        <h2 class="settings-title" id="general-settings-title">General Settings</h2>
+        
+        <div class="settings-grid">
+            <div class="option-setting">
+                <span id="theme-label">Theme Mode</span>
+                <select id="theme-selector">
+                    <option value="dark" id="dark-theme-option">Dark</option>
+                    <option value="light" id="light-theme-option">Light</option>
+                </select>
+            </div>
+            
+            <div class="option-setting">
+                <span id="language-label">Language</span>
+                <select id="language-selector">
+                    <option value="ar" id="ar-option">العربية</option>
+                    <option value="en" id="en-option">English</option>
+                </select>
+            </div>
+            
+            <a href="#" class="setting-item">
+                <svg class="setting-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/></svg>
+                <span class="setting-name" data-ar="الرقابة الأبوية" data-en="Parental Control">Parental Control</span>
+            </a>
+            <a href="#" class="setting-item">
+                <svg class="setting-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" fill="currentColor"/></svg>
+                <span class="setting-name" data-ar="صيغة الوقت" data-en="Time Format">Time Format</span>
+            </a>
+            <a href="#" class="setting-item">
+                <svg class="setting-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/></svg>
+                <span class="setting-name" data-ar="صيغة البث" data-en="Stream Format">Stream Format</span>
+            </a>
+            <a href="#" class="setting-item">
+                <svg class="setting-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" fill="currentColor"/></svg>
+                <span class="setting-name" data-ar="اختبار السرعة" data-en="Speed test">Speed test</span>
+            </a>
+            </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ================== منطق الساعة والتاريخ ==================
+            const timeElement = document.getElementById('current-time');
+            const dateElement = document.getElementById('current-date');
+            function updateTime() {
+                const now = new Date();
+                const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+                const dateOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+                timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+                dateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
+            }
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // ================== منطق تغيير الثيم (Theme) ==================
+            const themeSelector = document.getElementById('theme-selector');
+            const root = document.documentElement;
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+
+            themeSelector.value = currentTheme;
+            themeSelector.addEventListener('change', function() {
+                const newTheme = themeSelector.value;
+                root.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                // يتم إعادة تحميل الصفحة لتطبيق الثيم بشكل كامل واحترافي على كل الأنماط
+                location.reload(); 
+            });
+
+            // ================== منطق تغيير اللغة (Language) ==================
+            const langSelector = document.getElementById('language-selector');
+            const currentLang = localStorage.getItem('language') || 'ar';
+            langSelector.value = currentLang;
+
+            const translations = {
+                'ar': {
+                    'SETTINGS': 'الإعدادات',
+                    'Go back': 'العودة',
+                    'General Settings': 'الإعدادات العامة',
+                    'Theme Mode': 'وضع المظهر',
+                    'Language': 'اللغة',
+                    'Dark': 'داكن',
+                    'Light': 'فاتح',
+                    'Parental Control': 'الرقابة الأبوية',
+                    'Time Format': 'صيغة الوقت',
+                    'Stream Format': 'صيغة البث',
+                    'Speed test': 'اختبار السرعة'
+                },
+                'en': { /* البيانات الافتراضية */ }
+            };
+
+            function applyTranslation(lang) {
+                // تغيير اتجاه الصفحة
+                root.setAttribute('lang', lang);
+                root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+                
+                // تحديث الروابط الرئيسية
+                document.getElementById('header-settings-text').textContent = translations[lang]['SETTINGS'];
+                document.getElementById('goback-text').textContent = translations[lang]['Go back'];
+                document.getElementById('general-settings-title').textContent = translations[lang]['General Settings'];
+                document.getElementById('theme-label').textContent = translations[lang]['Theme Mode'];
+                document.getElementById('language-label').textContent = translations[lang]['Language'];
+                document.getElementById('dark-theme-option').textContent = translations[lang]['Dark'];
+                document.getElementById('light-theme-option').textContent = translations[lang]['Light'];
+                document.getElementById('settings-title-tag').textContent = `${translations[lang]['SETTINGS']} - IPTV`;
+                
+                // تحديث أسماء الإعدادات عبر البيانات المضافة (data-ar/data-en)
+                document.querySelectorAll('.setting-name').forEach(el => {
+                    const translationKey = el.getAttribute(`data-${lang}`) || el.textContent;
+                    el.textContent = translationKey;
+                });
+            }
+
+            // تطبيق اللغة الحالية عند التحميل
+            applyTranslation(currentLang);
+
+            langSelector.addEventListener('change', function() {
+                const newLang = langSelector.value;
+                localStorage.setItem('language', newLang);
+                location.reload(); // إعادة تحميل الصفحة لتطبيق اللغة بشكل كامل
+            });
+
+        });
+    </script>
+</body>
+</html>

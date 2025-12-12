@@ -1,0 +1,366 @@
+/* الأنماط العامة وإعادة الضبط */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* --- أنماط صفحة تسجيل الدخول (index.html) --- */
+
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* خلفية مجردة وملونة */
+    background: linear-gradient(135deg, #ff9966, #ff5e62, #9933cc, #33ccff);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.login-wrapper {
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* منطقة الشعار */
+.logo-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tv-icon {
+    width: 150px;
+    height: auto;
+    stroke: white;
+    stroke-width: 2;
+    fill: transparent;
+}
+
+.logo-text {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.iptv {
+    display: block;
+    font-size: 60px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.smarters {
+    display: block;
+    font-size: 24px;
+    letter-spacing: 5px;
+    margin-top: -10px;
+}
+
+/* منطقة تسجيل الدخول */
+.login-box {
+    flex: 1;
+    padding-left: 50px;
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: white;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background: #f0f0f0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    accent-color: white;
+}
+
+/* --- أنماط الواجهة الرئيسية (dashboard.html) --- */
+
+.dashboard-body {
+    background: #0d1117; 
+    padding: 0 40px; 
+    display: block;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-text-pro .iptv, .logo-text-pro .smarters {
+    display: inline;
+    font-weight: bold;
+}
+
+.logo-text-pro .iptv {
+    font-size: 30px;
+}
+.logo-text-pro .smarters {
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: #4CAF50; 
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.user-icons svg {
+    width: 20px;
+    height: 20px;
+    margin-right: -10px;
+}
+
+.about-link, .goback-link {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.about-link:hover, .goback-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- شبكة الأقسام الرئيسية --- */
+.main-grid-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; 
+    grid-template-rows: 2fr 1fr; 
+    gap: 25px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.grid-item {
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.grid-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.grid-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+.grid-icon.small {
+    width: 50px;
+    height: 50px;
+}
+
+.item-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* تلوين المربعات */
+.live-tv { 
+    grid-row: 1 / span 1; 
+    background: linear-gradient(135deg, #4CAF50, #00897b); 
+}
+.movies { 
+    background: linear-gradient(135deg, #ff5722, #ff9800); 
+}
+.series { 
+    background: linear-gradient(135deg, #9c27b0, #673ab7); 
+}
+
+.catch-up { 
+    background: #4db6ac; 
+}
+.multiscreen { 
+    background: #607d8b; 
+}
+.settings { 
+    background: #795548; 
+}
+
+/* منطقة التذييل */
+.dashboard-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 15px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-info {
+    text-align: center;
+    flex-grow: 1;
+}
+/* --- الإعدادات الخاصة بالتجاوب (Responsive Design) --- */
+
+/* شاشة تسجيل الدخول (Login Page) */
+@media (max-width: 900px) {
+    .login-wrapper {
+        flex-direction: column; /* تحويل العرض إلى عمودي على الشاشات الصغيرة */
+        width: 95%;
+        padding: 20px;
+        max-width: none;
+    }
+    .logo-area {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* فاصل سفلي */
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+    .login-box {
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .tv-icon {
+        width: 100px;
+    }
+    .iptv {
+        font-size: 40px;
+    }
+    .smarters {
+        font-size: 18px;
+    }
+}
+
+/* شاشة الواجهة الرئيسية (Dashboard) */
+@media (max-width: 1200px) {
+    .main-grid-container {
+        grid-template-columns: repeat(2, 1fr); /* عمودان بدل 3 */
+        grid-template-rows: auto;
+    }
+    .live-tv, .movies, .series { /* يتم تغيير حجمها لتناسب العمودين */
+        grid-row: auto / span 1; 
+    }
+}
+@media (max-width: 600px) {
+    .dashboard-body {
+        padding: 0 10px;
+    }
+    .dashboard-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header-info {
+        gap: 10px;
+    }
+    .main-grid-container {
+        grid-template-columns: 1fr; /* عمود واحد فقط للهواتف */
+    }
+    .grid-icon {
+        width: 60px;
+        height: 60px;
+    }
+    .item-title {
+        font-size: 20px;
+    }
+    .dashboard-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+
+/* شاشة الإعدادات (Settings) */
+@media (max-width: 900px) {
+    .settings-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 أعمدة */
+    }
+}
+@media (max-width: 600px) {
+    .settings-grid {
+        grid-template-columns: repeat(2, 1fr); /* عمودان فقط */
+    }
+    .setting-name {
+        font-size: 14px;
+    }
+}

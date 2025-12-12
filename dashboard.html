@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الواجهة الرئيسية - IPTV Dark Ver</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-body">
+    <header class="dashboard-header">
+        <div class="logo-text-pro">
+            <span class="iptv">IPTV</span>
+            <span class="smarters">Dark ver</span>
+        </div>
+        <div class="header-info">
+            <span id="current-time"></span>
+            <span id="current-date"></span>
+            <div class="user-icons">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="7" r="3"/><path d="M12 10c-3.87 0-7 3.13-7 7v2h14v-2c0-3.87-3.13-7-7-7z"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="15" cy="12" r="3"/><path d="M15 15c-3.87 0-7 3.13-7 7v2h14v-2c0-3.87-3.13-7-7-7z"/></svg>
+            </div>
+            <a href="#" class="about-link">About</a>
+            <a href="index.html" class="goback-link">Go back</a>
+        </div>
+    </header>
+
+    <div class="main-grid-container">
+        
+        <a href="live-tv.html" class="grid-item live-tv">
+            <svg class="grid-icon" viewBox="0 0 50 50"><path d="M40 10H10C8.35 10 7 11.35 7 13V37C7 38.65 8.35 40 10 40H40C41.65 40 43 38.65 43 37V13C43 11.35 41.65 10 40 10Z" stroke="white" stroke-width="2" fill="none"/><path d="M25 40V45" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M15 45H35" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M25 10V5" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M25 5L20 0" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M25 5L30 0" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+            <span class="item-title">LIVE TV</span>
+        </a>
+        
+        <a href="#" class="grid-item movies soon-feature">
+            <svg class="grid-icon" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15" fill="white"/><polygon points="23 18 35 25 23 32" fill="#ff5722"/></svg>
+            <span class="item-title">MOVIES</span>
+        </a>
+        
+        <a href="#" class="grid-item series soon-feature">
+            <svg class="grid-icon" viewBox="0 0 50 50"><path d="M10 10L40 10L40 40L10 40Z" stroke="white" stroke-width="2" fill="none"/><path d="M10 10L10 40M40 10L40 40" stroke="white" stroke-width="2"/><rect x="20" y="5" width="10" height="5" fill="white"/><line x1="25" y1="5" x2="25" y2="45" stroke="white" stroke-width="2"/></svg>
+            <span class="item-title">SERIES</span>
+        </a>
+        
+        <a href="#" class="grid-item catch-up soon-feature">
+            <svg class="grid-icon small" viewBox="0 0 50 50"><circle cx="25" cy="25" r="15" stroke="white" stroke-width="2" fill="none"/><polyline points="25 15 25 25 35 25" stroke="white" stroke-width="2" fill="none"/></svg>
+            <span class="item-title">CATCH UP</span>
+        </a>
+        
+        <a href="#" class="grid-item multiscreen soon-feature">
+            <svg class="grid-icon small" viewBox="0 0 50 50"><rect x="5" y="5" width="20" height="20" fill="white"/><rect x="25" y="5" width="20" height="20" fill="white"/><rect x="5" y="25" width="20" height="20" fill="white"/><rect x="25" y="25" width="20" height="20" fill="white"/></svg>
+            <span class="item-title">MULTISCREEN</span>
+        </a>
+        
+        <a href="settings.html" class="grid-item settings">
+            <svg class="grid-icon small" viewBox="0 0 50 50"><circle cx="25" cy="25" r="10" stroke="white" stroke-width="2" fill="none"/><path d="M36 15L42 18L39 25L42 32L36 35L33 30L25 38L17 30L14 35L8 32L11 25L8 18L14 15L17 20L25 12L33 20L36 15Z" fill="white"/></svg>
+            <span class="item-title">SETTINGS</span>
+        </a>
+    </div>
+
+    <footer class="dashboard-footer">
+        <span class="expiration-info">Expiration : [DATE BLOCKED]</span>
+        <span class="terms-info">By using this application, you agree to the Terms of Services.</span>
+        <span id="logged-in-user-info" class="logged-in-info">Logged in : loading...</span> 
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ==============================================
+            // 1. تشغيل الساعة والتاريخ الحقيقيين
+            // ==============================================
+            const timeElement = document.getElementById('current-time');
+            const dateElement = document.getElementById('current-date');
+
+            function updateTime() {
+                const now = new Date();
+                // تنسيق الوقت والتاريخ
+                const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+                const timeString = now.toLocaleTimeString('en-US', timeOptions);
+                timeElement.textContent = timeString;
+
+                const dateOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+                const dateString = now.toLocaleDateString('en-US', dateOptions);
+                dateElement.textContent = dateString;
+            }
+
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // ==============================================
+            // 2. عرض اسم المستخدم المسجل دخوله
+            // ==============================================
+            const userInfoElement = document.getElementById('logged-in-user-info');
+            const username = localStorage.getItem('loggedInUsername');
+
+            if (username) {
+                userInfoElement.textContent = `Logged in : ${username}`;
+            } else {
+                userInfoElement.textContent = `Logged in : Guest`;
+            }
+
+            // ==============================================
+            // 3. تفعيل رسالة "Soon" لباقي الأقسام
+            // ==============================================
+            const soonFeatures = document.querySelectorAll('.soon-feature');
+            soonFeatures.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const featureName = item.querySelector('.item-title').textContent;
+                    alert(`${featureName} feature is coming Soon!`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

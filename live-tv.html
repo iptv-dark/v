@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>البث المباشر - Live TV</title>
+
+    <link href="https://vjs.zencdn.net/8.6.0/video-js.css" rel="stylesheet" />
+
+    
+
+    <style>
+
+        /* أنماط عامة للواجهة الداكنة */
+
+        body { margin: 0; } /* لضمان عدم وجود هوامش بيضاء */
+
+        .live-tv-body {
+
+            background: #0d1117;
+
+            color: white;
+
+            padding: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-height: 100vh;
+
+        }
+
+        .tv-container {
+
+            display: flex;
+
+            flex: 1;
+
+            overflow: hidden;
+
+        }
+
+        .video-player-area {
+
+            flex: 3;
+
+            background-color: black;
+
+            position: relative;
+
+        }
+
+        .video-js {
+
+            width: 100% !important;
+
+            height: 100% !important;
+
+        }
+
+        /* الهيدر */
+
+        .dashboard-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 15px 40px; 
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        .logo-text-pro .iptv { color: #5B84B1; font-weight: bold; font-size: 24px;}
+
+        .logo-text-pro .smarters { color: white; font-weight: bold; font-size: 24px;}
+
+        .header-info {
+
+            display: flex;
+
+            gap: 20px;
+
+            align-items: center;
+
+            font-size: 14px;
+
+        }
+
+        .goback-link {
+
+            color: #5B84B1;
+
+            text-decoration: none;
+
+            padding: 5px 10px;
+
+            border: 1px solid #5B84B1;
+
+            border-radius: 5px;
+
+            transition: background-color 0.3s;
+
+        }
+
+        .goback-link:hover {
+
+            background-color: #5B84B1;
+
+            color: #0d1117;
+
+        }
+
+        /* قائمة القنوات */
+
+        .channel-list-area {
+
+            flex: 1;
+
+            min-width: 300px;
+
+            max-width: 400px;
+
+            background: #1e2a38;
+
+            display: flex;
+
+            flex-direction: column;
+
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        .search-bar {
+
+            padding: 10px 15px;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        .search-bar input {
+
+            width: 90%;
+
+            padding: 10px;
+
+            border-radius: 5px;
+
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            background: #0d1117;
+
+            color: white;
+
+            font-size: 16px;
+
+        }
+
+        .channels-scroll-container {
+
+            flex: 1;
+
+            overflow-y: auto;
+
+            /* تخصيص شريط التمرير */
+
+            scrollbar-width: thin;
+
+            scrollbar-color: #5B84B1 #1e2a38;
+
+        }
+
+        .channels-scroll-container::-webkit-scrollbar {
+
+            width: 8px;
+
+        }
+
+        .channels-scroll-container::-webkit-scrollbar-track {
+
+            background: #1e2a38;
+
+        }
+
+        .channels-scroll-container::-webkit-scrollbar-thumb {
+
+            background-color: #5B84B1;
+
+            border-radius: 4px;
+
+        }
+
+        .channel-item {
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 10px 15px;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+            cursor: pointer;
+
+            transition: background-color 0.2s;
+
+        }
+
+        .channel-item:hover, .channel-item.active {
+
+            background-color: #2b394d;
+
+        }
+
+        .channel-logo {
+
+            width: 40px;
+
+            height: 40px;
+
+            border-radius: 5px;
+
+            object-fit: contain;
+
+            margin-inline-end: 15px;
+
+        }
+
+        .channel-name {
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+        }
+
+        .channel-description {
+
+            font-size: 12px;
+
+            color: rgba(255, 255, 255, 0.6);
+
+        }
+
+        /* الفوتر */
+
+        .dashboard-footer {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 10px 40px;
+
+            font-size: 12px;
+
+            color: rgba(255, 255, 255, 0.5);
+
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        /* أنماط التجاوب */
+
+        @media (max-width: 900px) {
+
+            .tv-container { flex-direction: column; }
+
+            .channel-list-area { max-width: 100%; min-width: 100%; height: 300px; border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+
+            .video-player-area { height: 50vh; }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="live-tv-body">
+
+    
+
+    <header class="dashboard-header">
+
+        <div class="logo-text-pro">
+
+            <span class="iptv">LIVE</span>
+
+            <span class="smarters">TV</span>
+
+        </div>
+
+        <div class="header-info">
+
+            <span id="current-time"></span>
+
+            <span id="current-date"></span>
+
+            <a href="dashboard.html" class="goback-link">العودة</a>
+
+        </div>
+
+    </header>
+
+
+
+    <div class="tv-container">
+
+        
+
+        <div class="video-player-area">
+
+            <video
+
+                id="my-video"
+
+                class="video-js vjs-theme-city"
+
+                controls
+
+                autoplay
+
+                preload="auto"
+
+                data-setup='{}'>
+
+            </video>
+
+        </div>
+
+        
+
+        <div class="channel-list-area">
+
+            
+
+            <div class="search-bar" id="search-bar-container">
+
+                <input type="text" id="channel-search" placeholder="ابحث عن قناة...">
+
+            </div>
+
+            
+
+            <div class="channels-scroll-container" id="channels-container">
+
+                <p style="text-align: center; padding: 20px; color: yellow;">جاري تحميل القنوات من الرابط الخارجي...</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+
+    <footer class="dashboard-footer">
+
+        <p>&copy; 2024 IPTV Dark Version. All rights reserved.</p>
+
+        <p>Version 2.0.0</p>
+
+    </footer>
+
+
+
+    <script src="https://vjs.zencdn.net/8.6.0/video.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+
+    
+
+    <script>
+
+        // ======================================================
+
+        // الرابط الجديد لقائمة قنوات M3U (تم تعديله لاستخدام M3U8 المصفى)
+
+        // هذا الرابط يحتوي على قنوات بصيغة HLS التي يسهل على HLS.js تشغيلها
+
+        // ======================================================
+
+        const M3U_URL = 'https://iptv-org.github.io/iptv/index.m3u'; 
+
+        // يمكنك تجربة: const M3U_URL = 'https://iptv-org.github.io/iptv/regions/ara.m3u'; للقنوات العربية فقط
+
+
+
+        
+
+        // دالة مساعدة جديدة لتبسيط منطق HLS
+
+        function loadNewHlsStream(videoElement, url) {
+
+            
+
+            // التأكد من تدمير بث HLS السابق إن وجد
+
+            if (window.currentStream && typeof window.currentStream.destroy === 'function') {
+
+                window.currentStream.destroy();
+
+                window.currentStream = null;
+
+            }
+
+
+
+            if (Hls.isSupported()) {
+
+                const hls = new Hls();
+
+                hls.loadSource(url);
+
+                hls.attachMedia(videoElement);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function() { 
+
+                    videoElement.play();
+
+                    window.currentStream = hls; // حفظ مرجع البث الحالي
+
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+
+                    console.error('HLS Error:', data);
+
+                    // عرض رسالة خطأ داخل منطقة المشغل
+
+                    const playerArea = document.querySelector('.video-player-area');
+
+                    playerArea.innerHTML = '<p style="color:red; text-align:center; padding-top: 50%; height: 100%; box-sizing: border-box;">تعذر تشغيل البث. قد يكون الرابط غير صالح أو هناك مشكلة في مصدر البث.</p>';
+
+                });
+
+
+
+            } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+
+                // دعم المتصفحات الأصلية (مثل سفاري)
+
+                videoElement.src = url;
+
+                videoElement.addEventListener('loadedmetadata', function() { videoElement.play(); });
+
+            } else {
+
+                alert('المتصفح لا يدعم بث HLS/M3U8.');
+
+            }
+
+        }
+
+
+
+
+
+        // دالة تشغيل القناة (تم تعديلها لإعادة بناء عنصر الفيديو)
+
+        function playChannel(url) {
+
+            let video = document.getElementById('my-video');
+
+            const playerContainer = document.querySelector('.video-player-area'); 
+
+
+
+            // 1. تدمير المشغل القديم وإعادة بناء عنصر <video>
+
+            if (window.player && typeof window.player.dispose === 'function') {
+
+                
+
+                // تدمير مشغل الفيديو.js
+
+                window.player.dispose(); 
+
+                
+
+                // إعادة بناء عنصر الفيديو (مهم جداً!)
+
+                const newVideoElement = document.createElement('video');
+
+                newVideoElement.id = 'my-video';
+
+                newVideoElement.className = 'video-js vjs-theme-city';
+
+                newVideoElement.controls = true;
+
+                newVideoElement.autoplay = true;
+
+                newVideoElement.preload = 'auto';
+
+                newVideoElement.setAttribute('data-setup', '{}');
+
+                
+
+                // إزالة المحتوى القديم (مثل رسائل الخطأ) وإضافة عنصر الفيديو الجديد
+
+                playerContainer.innerHTML = '';
+
+                playerContainer.appendChild(newVideoElement);
+
+                
+
+                // تحديث مرجع عنصر الفيديو إلى العنصر الجديد
+
+                video = newVideoElement;
+
+            }
+
+            
+
+            // 2. إنشاء مشغل Video.js جديد
+
+            window.player = videojs(video, {autoplay: true}, function() {
+
+                console.log('Video.js Player is ready');
+
+            });
+
+
+
+            // 3. تحميل البث الجديد
+
+            loadNewHlsStream(video, url);
+
+        }
+
+        
+
+        // دالة تحليل محتوى M3U وبناء القائمة
+
+        function parseM3UContent(m3uContent) {
+
+            if (!m3uContent.startsWith('#EXTM3U')) {
+
+                const channelsContainer = document.getElementById('channels-container');
+
+                channelsContainer.innerHTML = '<p style="text-align: center; padding: 20px; color: red;">خطأ: محتوى M3U غير صالح أو فارغ.</p>';
+
+                return;
+
+            }
+
+            
+
+            const lines = m3uContent.split('\n');
+
+            let channelsHtml = '';
+
+            let channelName = '';
+
+            let channelLogo = 'https://via.placeholder.com/40x40.png?text=CH';
+
+            let firstChannelUrl = null;
+
+
+
+            for (let i = 0; i < lines.length; i++) {
+
+                const line = lines[i].trim();
+
+
+
+                if (line.startsWith('#EXTINF')) {
+
+                    const nameMatch = line.match(/,(.*)$/);
+
+                    channelName = nameMatch ? nameMatch[1].trim() : 'قناة مجهولة';
+
+                    
+
+                    const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+
+                    channelLogo = logoMatch ? logoMatch[1] : 'https://via.placeholder.com/40x40.png?text=CH';
+
+
+
+                } else if (line.startsWith('http') || line.startsWith('https')) {
+
+                    const streamUrl = line;
+
+                    
+
+                    if (firstChannelUrl === null) {
+
+                        firstChannelUrl = streamUrl; // حفظ رابط أول قناة للتشغيل التلقائي
+
+                    }
+
+
+
+                    // بناء عنصر القناة
+
+                    channelsHtml += `
+
+                        <div class="channel-item" data-name="${channelName}" data-url="${streamUrl}">
+
+                            <img src="${channelLogo}" alt="${channelName}" class="channel-logo" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/40x40.png?text=CH';">
+
+                            <div>
+
+                                <div class="channel-name">${channelName}</div>
+
+                                <div class="channel-description">Stream</div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                    channelName = '';
+
+                    channelLogo = 'https://via.placeholder.com/40x40.png?text=CH';
+
+                }
+
+            }
+
+
+
+            const channelsContainer = document.getElementById('channels-container');
+
+            channelsContainer.innerHTML = channelsHtml;
+
+            
+
+            // تفعيل مستمعي الأحداث
+
+            attachChannelClickListeners();
+
+            
+
+            // تشغيل أول قناة تلقائياً
+
+            if (firstChannelUrl) {
+
+                const firstItem = channelsContainer.querySelector('.channel-item');
+
+                if (firstItem) firstItem.classList.add('active');
+
+                playChannel(firstChannelUrl);
+
+            }
+
+        }
+
+
+
+        // دالة جلب قائمة M3U من الرابط وتشغيلها
+
+        async function loadM3UFromUrl(url) {
+
+            const channelsContainer = document.getElementById('channels-container');
+
+            channelsContainer.innerHTML = '<p style="text-align: center; padding: 20px; color: yellow;">جاري تحميل القنوات من الرابط الخارجي...</p>';
+
+
+
+            try {
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+
+                    throw new Error(`HTTP error! status: ${response.status}`);
+
+                }
+
+                const m3uContent = await response.text();
+
+                
+
+                parseM3UContent(m3uContent.trim());
+
+            } catch (error) {
+
+                console.error('Fetch M3U Error:', error);
+
+                channelsContainer.innerHTML = `<p style="text-align: center; padding: 20px; color: red;">فشل في تحميل القنوات من الرابط: ${url}</p><p style="text-align: center; padding: 5px; color: red;">الرجاء التأكد من تشغيل الملف عبر خادم ويب (مثل Live Server).</p>`;
+
+            }
+
+        }
+
+
+
+        // ربط مستمعي الأحداث
+
+        function attachChannelClickListeners() {
+
+             const channelItems = document.querySelectorAll('.channel-item');
+
+             channelItems.forEach(item => {
+
+                 item.addEventListener('click', function() {
+
+                     document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+
+                     this.classList.add('active');
+
+                     
+
+                     const streamUrl = this.getAttribute('data-url');
+
+                     playChannel(streamUrl);
+
+                 });
+
+             });
+
+        }
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            
+
+            // ================== منطق الساعة والتاريخ ==================
+
+            const timeElement = document.getElementById('current-time');
+
+            const dateElement = document.getElementById('current-date');
+
+            function updateTime() {
+
+                const now = new Date();
+
+                const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+                const dateOptions = { month: 'short', day: '2-digit', year: 'numeric' };
+
+                timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+
+                dateElement.textContent = now.toLocaleDateString('en-US', dateOptions);
+
+            }
+
+            updateTime();
+
+            setInterval(updateTime, 1000);
+
+            
+
+            // ================== التحميل من الرابط الخارجي ==================
+
+            loadM3UFromUrl(M3U_URL);
+
+            
+
+            // ================== منطق البحث ==================
+
+            const searchInput = document.getElementById('channel-search');
+
+            searchInput.addEventListener('input', function() {
+
+                const searchTerm = this.value.trim().toLowerCase();
+
+                const channelItems = document.querySelectorAll('.channel-item');
+
+                channelItems.forEach(item => {
+
+                    const name = item.getAttribute('data-name').toLowerCase();
+
+                    item.style.display = name.includes(searchTerm) ? 'flex' : 'none';
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
