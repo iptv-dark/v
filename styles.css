@@ -350,15 +350,24 @@ input::placeholder {
 }
 
 
-/* شاشة الإعدادات (Settings) */
+/* شاشة الإعدادات (Settings) - تعديلات محسنة */
 @media (max-width: 900px) {
+    .settings-container {
+        padding: 30px 20px;
+    }
     .settings-grid {
         grid-template-columns: repeat(3, 1fr); /* 3 أعمدة */
+    }
+    .option-setting {
+        grid-column: span 3; /* جعل خيارات الثيم واللغة تأخذ العرض الكامل */
     }
 }
 @media (max-width: 600px) {
     .settings-grid {
         grid-template-columns: repeat(2, 1fr); /* عمودان فقط */
+    }
+    .option-setting {
+        grid-column: span 2; /* جعل خيارات الثيم واللغة تأخذ العرض الكامل */
     }
     .setting-name {
         font-size: 14px;
